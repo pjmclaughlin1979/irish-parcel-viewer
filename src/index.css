@@ -1,0 +1,488 @@
+:root {
+  --app-header-height: 5.5rem;
+  --app-ink: #030a00;
+  --app-green: #008835;
+  --app-teal: #008835;
+  --app-light-green: #a5eeb9;
+  --app-paper: #f5f2ec;
+  --app-border: #ebe8e1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--app-paper);
+  color: var(--app-ink);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app__header {
+  min-height: var(--app-header-height);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.85rem clamp(1rem, 4vw, 4rem);
+  border-bottom: 1px solid var(--app-border);
+  background: #fff;
+  color: var(--app-ink);
+  flex: 0 0 auto;
+}
+
+.app__logo {
+  flex: 0 0 auto;
+}
+
+.app__logo img {
+  display: block;
+  width: 10rem;
+  height: auto;
+}
+
+.app__nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-right: auto;
+}
+
+.app__nav a,
+.app__footer a {
+  color: var(--app-ink);
+  text-decoration: none;
+}
+
+.app__nav a:hover,
+.app__footer a:hover {
+  color: var(--app-green);
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.app__title {
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--app-border);
+}
+
+.app__title h1,
+.app__eyebrow {
+  margin: 0;
+}
+
+.app__title h1 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.app__eyebrow {
+  margin-bottom: 0.15rem;
+  color: var(--app-green);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app__source-link {
+  color: #fff;
+  font-size: 0.85rem;
+  text-underline-offset: 0.2rem;
+}
+
+.app__user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.app__auth-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.app__auth-control button {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #b7c3c2;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--app-green);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.app__auth-control button:hover {
+  border-color: var(--app-green);
+}
+
+.app__auth-control button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.app__auth-error {
+  max-width: 16rem;
+  color: #a32920;
+  font-size: 0.72rem;
+}
+
+.app__auth-error code {
+  font-size: 0.7rem;
+}
+
+.app__user button,
+.auth-card__sign-in {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #b7c3c2;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--app-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.app__user button:hover,
+.auth-card__sign-in:hover {
+  border-color: var(--app-green);
+}
+
+.auth-card__sign-in:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app__auth {
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: var(--app-paper);
+  color: var(--app-ink);
+}
+
+.auth-card {
+  width: min(100%, 28rem);
+  padding: 2rem;
+  border: 1px solid #cbd8d5;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(23, 59, 63, 0.12);
+}
+
+.auth-card h2 {
+  margin: 0 0 0.75rem;
+}
+
+.auth-card p {
+  line-height: 1.5;
+}
+
+.auth-card__error {
+  color: #a32920;
+  font-size: 0.85rem;
+}
+
+.auth-card code {
+  font-size: 0.8rem;
+}
+
+.app__map-shell {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.map-loading {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  z-index: 2;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--app-ink);
+  transform: translateX(-50%);
+}
+
+.app__map {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.app__map > .esri-view-root,
+.app__map .esri-view-surface {
+  width: 100%;
+  height: 100%;
+}
+
+.parcel-report-button {
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--app-teal);
+  border-radius: 3px;
+  background: var(--app-teal);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.parcel-report-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.parcel-report {
+  margin-top: 0.65rem;
+  color: var(--app-ink);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.parcel-report p {
+  margin: 0.45rem 0;
+}
+
+.parcel-report__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.45rem;
+  font-size: 0.68rem;
+}
+
+.parcel-report__table th,
+.parcel-report__table td {
+  padding: 0.25rem;
+  border-bottom: 1px solid #dce5e2;
+  text-align: left;
+  white-space: nowrap;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #b7c3c2;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--app-ink);
+  font-size: 0.78rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.map-attribution {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.35rem;
+  padding: 0.2rem 0.35rem;
+  background: rgba(255, 255, 255, 0.82);
+  color: #4c5555;
+  font-size: 0.68rem;
+}
+
+.report-sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  width: min(28rem, 92vw);
+  transform: translateX(calc(100% - 2.5rem));
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.report-sidebar--open {
+  transform: translateX(0);
+}
+
+.report-sidebar__toggle {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 2.5rem;
+  min-height: 7rem;
+  padding: 0.5rem 0.35rem;
+  border: 1px solid #b7c3c2;
+  border-right: 0;
+  border-radius: 5px 0 0 5px;
+  background: var(--app-teal);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  writing-mode: vertical-rl;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.report-sidebar__content {
+  height: 100%;
+  margin-left: 2.5rem;
+  overflow: auto;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.98);
+  color: var(--app-ink);
+  box-shadow: -3px 0 12px rgba(23, 59, 63, 0.2);
+  pointer-events: auto;
+}
+
+.report-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.report-sidebar__header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.report-sidebar__header button {
+  border: 0;
+  background: transparent;
+  color: var(--app-ink);
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.report-sidebar__content h3 {
+  margin-bottom: 0.4rem;
+}
+
+.report-sidebar__content p {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.map-error {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  max-width: 18rem;
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 4px;
+  background: #fff;
+  color: #a32920;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+.app__footer {
+  flex: 0 0 auto;
+  padding: 1.5rem clamp(1rem, 4vw, 4rem) 1rem;
+  background: #fff;
+  color: var(--app-ink);
+}
+
+.app__footer-main {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(18rem, 2fr) minmax(14rem, 1.5fr);
+  gap: 2rem;
+  align-items: start;
+  max-width: 92rem;
+  margin: 0 auto;
+  padding-bottom: 1.25rem;
+}
+
+.app__footer-main img {
+  width: 8.5rem;
+  height: auto;
+}
+
+.app__footer-main nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+}
+
+.app__footer-main p {
+  max-width: 26rem;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.app__footer-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  max-width: 92rem;
+  margin: 0 auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--app-border);
+  color: #5b765e;
+  font-size: 0.72rem;
+}
+
+.app__footer-terms span {
+  margin-left: auto;
+}
+
+@media (max-width: 850px) {
+  .app__header {
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+
+  .app__nav {
+    order: 3;
+    flex-basis: 100%;
+    overflow-x: auto;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--app-border);
+  }
+
+  .app__title {
+    margin-left: auto;
+  }
+
+  .app__footer-main {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .app__footer-main p {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .app__header {
+    padding-inline: 1rem;
+  }
+
+  .app__logo img {
+    width: 8rem;
+  }
+
+  .app__title {
+    padding-left: 0.75rem;
+  }
+
+  .app__title h1 {
+    font-size: 0.85rem;
+  }
+
+  .app__footer-main {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .app__footer-terms span {
+    margin-left: 0;
+  }
+}
