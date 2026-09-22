@@ -386,6 +386,43 @@ function createReportContent(
   return container;
 }
 
+function createParcelPopupTemplate(language: Language) {
+  return new PopupTemplate({
+    title: language === "ga" ? "Sonraí réadmhaoine" : "Property details",
+    content: [
+      {
+        type: "fields",
+        fieldInfos: [
+          {
+            fieldName: "propNumber",
+            label: language === "ga" ? "Uimhir réadmhaoine" : "Property number",
+          },
+          {
+            fieldName: "tfa",
+            label: language === "ga" ? "Achar urláir iomlán" : "Total floor area",
+            format: { places: 1 },
+          },
+          {
+            fieldName: "val",
+            label: language === "ga" ? "Luacháil" : "Valuation",
+            format: { places: 0, digitSeparator: true },
+          },
+        ],
+      },
+      {
+        type: "custom",
+        creator: (event: PopupTemplateCreatorEvent) =>
+          createReportContent(
+            event,
+            language === "ga"
+              ? "Féach ar an tuairisc luachála"
+              : "View valuation report",
+          ),
+      },
+    ],
+  });
+}
+
 export default function App() {
   const mapElement = useRef<HTMLDivElement>(null);
   const [mapError, setMapError] = useState<string | null>(null);
@@ -412,6 +449,7 @@ export default function App() {
   });
   const copy = interfaceCopy[language];
   const parcelLayer = useRef<VectorTileLayer | null>(null);
+  const parcelPopupTemplate = useRef<PopupTemplate | null>(null);
   useEffect(() => {
     const showReport = (event: Event) => {
       const detail = (event as CustomEvent<{
@@ -469,40 +507,8 @@ export default function App() {
       visible: true,
     });
     parcelLayer.current = layer;
-    const parcelPopup = new PopupTemplate({
-      title: language === "ga" ? "Sonraí réadmhaoine" : "Property details",
-      content: [
-        {
-          type: "fields",
-          fieldInfos: [
-            {
-              fieldName: "propNumber",
-              label: language === "ga" ? "Uimhir réadmhaoine" : "Property number",
-            },
-            {
-              fieldName: "tfa",
-              label: language === "ga" ? "Achar urláir iomlán" : "Total floor area",
-              format: { places: 1 },
-            },
-            {
-              fieldName: "val",
-              label: language === "ga" ? "Luacháil" : "Valuation",
-              format: { places: 0, digitSeparator: true },
-            },
-          ],
-        },
-        {
-          type: "custom",
-          creator: (event: PopupTemplateCreatorEvent) =>
-            createReportContent(
-              event,
-              language === "ga"
-                ? "Féach ar an tuairisc luachála"
-                : "View valuation report",
-            ),
-        },
-      ],
-    });
+    const parcelPopup = createParcelPopupTemplate(language);
+    parcelPopupTemplate.current = parcelPopup;
 
     const map = new Map({
       basemap: new Basemap({
@@ -580,7 +586,7 @@ export default function App() {
             result.type === "graphic" && Boolean(result.graphic),
         );
         const graphics = hits.map(({ graphic }) => {
-          graphic.popupTemplate = parcelPopup;
+          graphic.popupTemplate = parcelPopupTemplate.current ?? parcelPopup;
           return graphic;
         });
         if (graphics.length === 0) {
@@ -650,8 +656,15 @@ export default function App() {
       search.destroy();
       clickHandle.remove();
       parcelLayer.current = null;
+      parcelPopupTemplate.current = null;
     };
-  }, [appliedFilter, arcgisUser, language]);
+  }, [appliedFilter, arcgisUser]);
+
+  useEffect(() => {
+    if (parcelPopupTemplate.current) {
+      parcelPopupTemplate.current = createParcelPopupTemplate(language);
+    }
+  }, [language]);
 
   const applyFilter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
