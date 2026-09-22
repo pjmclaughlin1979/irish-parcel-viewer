@@ -179,7 +179,10 @@ const interfaceCopy = {
   en: {
     services: "Services",
     resources: "Resources",
-    about: "About us",
+    mapShop: "Map Shop",
+    archives: "Our Archives",
+    about: "About Us",
+    careers: "Careers",
     contact: "Contact us",
     valuationServices: "Valuation services",
     title: "Irish valuation list",
@@ -196,7 +199,16 @@ const interfaceCopy = {
     footerDescription: "We provide a property registration system, property valuation service, and national mapping and surveying infrastructure for the State.",
     dataSharing: "Data sharing",
     privacy: "Privacy notice",
+    manageCookies: "Manage Cookies",
+    freedomOfInformation: "Freedom of Information",
     accessibility: "Accessibility",
+    lobbying: "Lobbying",
+    environmentalInformation: "Access to Information on the Environment",
+    protectedDisclosures: "Protected Disclosures",
+    address: <>Smithfield Hall, Smithfield,<br />Dublin 7, D07 AEF4</>,
+    getDirections: "Get directions",
+    backToTop: "Back to top",
+    websiteDesignedBy: "Website designed by",
     filterProperties: "Filter properties",
     hideFilters: "Hide filters",
     filterList: "Filter valuation list",
@@ -221,7 +233,10 @@ const interfaceCopy = {
   ga: {
     services: "Seirbhísí",
     resources: "Acmhainní",
-    about: "Fúinn",
+    mapShop: "Siopa Léarscáileanna",
+    archives: "Ár gCartlanna",
+    about: "Maidir le Tailte Éireann",
+    careers: "Gairmeacha Beatha",
     contact: "Déan teagmháil linn",
     valuationServices: "Seirbhísí luachála",
     title: "Liosta luachála na hÉireann",
@@ -238,7 +253,16 @@ const interfaceCopy = {
     footerDescription: "Soláthraímid córas cláraithe réadmhaoine, seirbhís luachála réadmhaoine, agus bonneagar náisiúnta mapála agus suirbhéireachta don Stát.",
     dataSharing: "Comhroinnt sonraí",
     privacy: "Fógra príobháideachais",
+    manageCookies: "Fianáin a bhainistiú",
+    freedomOfInformation: "Saoráil Faisnéise",
     accessibility: "Inrochtaineacht",
+    lobbying: "Brústocaireacht",
+    environmentalInformation: "Rochtain ar Fhaisnéis faoin gComhshaol",
+    protectedDisclosures: "Nochtadh Cosanta",
+    address: <>Smithfield Hall, Margadh na Feirme,<br />Baile Átha Cliath 7, D07 AEF4</>,
+    getDirections: "Faigh Treoracha",
+    backToTop: "Fill ar an mbarr",
+    websiteDesignedBy: "Dearadh an suíomh gréasáin ag",
     filterProperties: "Scag réadmhaoine",
     hideFilters: "Folaigh na scagairí",
     filterList: "Scag liosta na luachálacha",
@@ -683,7 +707,7 @@ export default function App() {
   };
 
   return (
-    <main className="app">
+    <main className="app" id="top-of-page">
       <div className="account-bar">
         {authChecking ? (
           <span>{copy.checkingSignIn}</span>
@@ -929,28 +953,61 @@ export default function App() {
           )}
       </section>
       <footer className="app__footer">
-        <div className="app__footer-main">
-          <img
-            src="https://tailte.ie/wp-content/uploads/2025/04/Tailte-Eireann-Colour.png"
-            alt="Tailte Éireann"
-          />
-          <nav aria-label="Footer navigation">
-            <a href="https://tailte.ie/services/">{copy.services}</a>
-            <a href="https://tailte.ie/resources/">{copy.resources}</a>
-            <a href="https://tailte.ie/map-shop/">{language === "ga" ? "Siopa léarscáileanna" : "Map shop"}</a>
-            <a href="https://tailte.ie/our-archives/">{language === "ga" ? "Ár gcartlanna" : "Our archives"}</a>
-            <a href="https://tailte.ie/careers/">{language === "ga" ? "Gairmeacha" : "Careers"}</a>
-            <a href="https://tailte.ie/contact-us/">{copy.contact}</a>
-          </nav>
-          <p>
-            {copy.footerDescription}
-          </p>
-        </div>
-        <div className="app__footer-terms">
-          <a href="https://tailte.ie/data-sharing/">{copy.dataSharing}</a>
-          <a href="https://tailte.ie/privacy-notice/">{copy.privacy}</a>
-          <a href="https://tailte.ie/accessibility-statement/">{copy.accessibility}</a>
-          <span>© Tailte Éireann</span>
+        <div className="app__footer-container">
+          <div className="app__footer-row app__footer-row--main">
+            <div className="app__footer-logo">
+              <img
+                src="https://tailte.ie/wp-content/uploads/2025/04/Tailte-Eireann-Colour.png"
+                alt="Tailte Éireann"
+              />
+            </div>
+            <nav className="app__footer-nav" aria-label="Footer navigation">
+              <a href="https://tailte.ie/services/">{copy.services}</a>
+              <a href="https://tailte.ie/resources/">{copy.resources}</a>
+              <a href="https://tailte.ie/map-shop/">{copy.mapShop}</a>
+              <a href="https://tailte.ie/our-archives/">{copy.archives}</a>
+              <a href="https://tailte.ie/about/">{copy.about}</a>
+              <a href="https://tailte.ie/careers/">{copy.careers}</a>
+              <a href="https://tailte.ie/contact-us/">{copy.contact}</a>
+            </nav>
+            <p>{copy.footerDescription}</p>
+          </div>
+          <div className="app__footer-row app__footer-row--terms">
+            <nav className="app__footer-terms" aria-label="Legal and information links">
+              <a href="https://tailte.ie/data-sharing/">{copy.dataSharing}</a>
+              <a href="https://tailte.ie/privacy-notice/">{copy.privacy}</a>
+              <a href="https://tailte.ie/manage-cookies/">{copy.manageCookies}</a>
+              <a href="https://tailte.ie/freedom-of-information/">{copy.freedomOfInformation}</a>
+              <a href="https://tailte.ie/accessibility-statement/">{copy.accessibility}</a>
+              <a href="https://tailte.ie/lobbying/">{copy.lobbying}</a>
+              <a href="https://tailte.ie/access-to-information-on-the-environment/">{copy.environmentalInformation}</a>
+              <a href="https://tailte.ie/protected-disclosures/">{copy.protectedDisclosures}</a>
+            </nav>
+          </div>
+          <div className="app__footer-row app__footer-row--contact">
+            <div className="app__footer-address">
+              <p>{copy.address}</p>
+              <a href="https://tailte.ie/contact-us/locations">{copy.getDirections}</a>
+            </div>
+            <div className="app__footer-social" aria-label="Social media">
+              <a href="https://www.facebook.com/Tailte/" target="_blank" rel="noreferrer" aria-label="Facebook">
+                <img src="https://tailte.ie/wp-content/uploads/2024/11/social-facebook.svg" alt="" />
+              </a>
+              <a href="https://www.instagram.com/tailteeireann/" target="_blank" rel="noreferrer" aria-label="Instagram">
+                <img src="https://tailte.ie/wp-content/uploads/2024/11/social-instagram.svg" alt="" />
+              </a>
+              <a href="https://ie.linkedin.com/company/tailte-eireann" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <img src="https://tailte.ie/wp-content/uploads/2025/03/linkedin.svg" alt="" />
+              </a>
+            </div>
+            <a className="app__footer-back-to-top" href="#top-of-page">
+              <span aria-hidden="true">⌃</span>
+              {copy.backToTop}
+            </a>
+          </div>
+          <div className="app__footer-row app__footer-row--credit">
+            <p>{copy.websiteDesignedBy} <a href="https://www.ebowdigital.com" target="_blank" rel="noreferrer">Ebow</a></p>
+          </div>
         </div>
       </footer>
         </>
