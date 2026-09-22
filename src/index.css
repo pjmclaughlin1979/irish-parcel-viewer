@@ -253,6 +253,21 @@ body,
   font-size: 0.72rem;
 }
 
+.language-toggle {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #b7c3c2;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--app-green);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.language-toggle:hover {
+  border-color: var(--app-green);
+}
+
 .auth-card {
   width: min(100%, 28rem);
   padding: 2rem;

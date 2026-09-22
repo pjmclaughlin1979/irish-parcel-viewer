@@ -173,6 +173,83 @@ type TailteProperty = {
   ValuationReport: ValuationReportProperty[];
 };
 
+type Language = "en" | "ga";
+
+const interfaceCopy = {
+  en: {
+    services: "Services",
+    resources: "Resources",
+    about: "About us",
+    contact: "Contact us",
+    valuationServices: "Valuation services",
+    title: "Irish valuation list",
+    signIn: "Sign in to ArcGIS Online",
+    signOut: "Sign out",
+    checkingSignIn: "Checking sign-in…",
+    signedInAs: "Signed in as",
+    access: "ArcGIS Online access",
+    signInToView: "Sign in to view the valuation list",
+    authenticate: "Authenticate with ArcGIS Online to access the interactive valuation map and property information.",
+    checkingSession: "Checking your ArcGIS Online session…",
+    filterProperties: "Filter properties",
+    hideFilters: "Hide filters",
+    filterList: "Filter valuation list",
+    localAuthority: "Local authority",
+    allAuthorities: "All local authorities",
+    category: "Valuation category",
+    allCategories: "All categories",
+    subcategory: "Valuation subcategory",
+    allSubcategories: "All subcategories",
+    selectCategory: "Select a category first",
+    apply: "Apply filter",
+    clear: "Clear",
+    filterHint: "Choose names to filter the properties shown on the map.",
+    showReport: "Show report",
+    hideReport: "Hide report",
+    report: "Valuation report",
+    closeReport: "Close valuation report",
+    selectProperty: "Select a property first.",
+    loadingMap: "Loading map…",
+    language: "Gaeilge",
+  },
+  ga: {
+    services: "Seirbhísí",
+    resources: "Acmhainní",
+    about: "Fúinn",
+    contact: "Déan teagmháil linn",
+    valuationServices: "Seirbhísí luachála",
+    title: "Liosta luachála na hÉireann",
+    signIn: "Sínigh isteach in ArcGIS Online",
+    signOut: "Sínigh amach",
+    checkingSignIn: "Stádas sínithe á sheiceáil…",
+    signedInAs: "Sínithe isteach mar",
+    access: "Rochtain ArcGIS Online",
+    signInToView: "Sínigh isteach chun an liosta luachála a fheiceáil",
+    authenticate: "Fíordheimhnigh le ArcGIS Online chun rochtain a fháil ar an léarscáil idirghníomhach agus ar fhaisnéis réadmhaoine.",
+    checkingSession: "Seisiún ArcGIS Online á sheiceáil…",
+    filterProperties: "Scag réadmhaoine",
+    hideFilters: "Folaigh na scagairí",
+    filterList: "Scag liosta na luachálacha",
+    localAuthority: "Údarás áitiúil",
+    allAuthorities: "Gach údarás áitiúil",
+    category: "Catagóir luachála",
+    allCategories: "Gach catagóir",
+    subcategory: "Fo-chatagóir luachála",
+    allSubcategories: "Gach fo-chatagóir",
+    selectCategory: "Roghnaigh catagóir ar dtús",
+    apply: "Cuir an scagaire i bhfeidhm",
+    clear: "Glan",
+    filterHint: "Roghnaigh ainmneacha chun na réadmhaoine ar an léarscáil a scagadh.",
+    showReport: "Taispeáin an tuairisc",
+    hideReport: "Folaigh an tuairisc",
+    report: "Tuairisc luachála",
+    closeReport: "Dún an tuairisc luachála",
+    selectProperty: "Roghnaigh réadmhaoin ar dtús.",
+    loadingMap: "Léarscáil á luchtú…",
+    language: "English",
+  },
+} as const;
+
 function createParcelStyle(filter: {
   localAuthority: string;
   categoryCodes: string[];
@@ -286,6 +363,7 @@ export default function App() {
   const [authChecking, setAuthChecking] = useState(true);
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [language, setLanguage] = useState<Language>("en");
   const [filterOpen, setFilterOpen] = useState(false);
   const [localAuthorityFilter, setLocalAuthorityFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -295,6 +373,7 @@ export default function App() {
     categoryCodes: [] as string[],
     subcategory: "",
   });
+  const copy = interfaceCopy[language];
   const parcelLayer = useRef<VectorTileLayer | null>(null);
   useEffect(() => {
     const showReport = (event: Event) => {
@@ -581,47 +660,52 @@ export default function App() {
           />
         </a>
         <nav className="app__nav" aria-label="Main navigation">
-          <a href="https://tailte.ie/services/">Services</a>
-          <a href="https://tailte.ie/resources/">Resources</a>
-          <a href="https://tailte.ie/about/">About us</a>
-          <a href="https://tailte.ie/contact-us/">Contact us</a>
+          <a href="https://tailte.ie/services/">{copy.services}</a>
+          <a href="https://tailte.ie/resources/">{copy.resources}</a>
+          <a href="https://tailte.ie/about/">{copy.about}</a>
+          <a href="https://tailte.ie/contact-us/">{copy.contact}</a>
         </nav>
         <div className="app__title">
-          <p className="app__eyebrow">Valuation services</p>
-          <h1>Irish valuation list</h1>
+          <p className="app__eyebrow">{copy.valuationServices}</p>
+          <h1>{copy.title}</h1>
         </div>
         <div className="app__auth">
           {authError && <span className="app__auth-error">{authError}</span>}
           {authChecking ? (
-            <span>Checking sign-in…</span>
+            <span>{copy.checkingSignIn}</span>
           ) : arcgisUser ? (
             <>
               <span title={arcgisUser.username}>
-                Signed in as {arcgisUser.fullName}
+                {copy.signedInAs} {arcgisUser.fullName}
               </span>
               <button type="button" onClick={handleSignOut}>
-                Sign out
+                {copy.signOut}
               </button>
             </>
           ) : (
             <button type="button" onClick={handleSignIn} disabled={authBusy}>
-              {authBusy ? "Signing in…" : "Sign in to ArcGIS Online"}
+              {authBusy ? "Signing in…" : copy.signIn}
             </button>
           )}
         </div>
+        <button
+          className="language-toggle"
+          type="button"
+          onClick={() => setLanguage((current) => (current === "en" ? "ga" : "en"))}
+          aria-label={`Switch language to ${copy.language}`}
+        >
+          {copy.language}
+        </button>
       </header>
       {authChecking || !arcgisUser ? (
         <section className="app__auth-gate" aria-live="polite">
           <div className="auth-card">
-            <p className="app__eyebrow">ArcGIS Online access</p>
-            <h2>Sign in to view the valuation list</h2>
-            <p>
-              Authenticate with ArcGIS Online to access the interactive
-              valuation map and property information.
-            </p>
+            <p className="app__eyebrow">{copy.access}</p>
+            <h2>{copy.signInToView}</h2>
+            <p>{copy.authenticate}</p>
             {authError && <p className="auth-card__error">{authError}</p>}
             {authChecking ? (
-              <p>Checking your ArcGIS Online session…</p>
+              <p>{copy.checkingSession}</p>
             ) : (
               <button
                 className="auth-card__sign-in"
@@ -629,7 +713,7 @@ export default function App() {
                 onClick={handleSignIn}
                 disabled={authBusy}
               >
-                {authBusy ? "Signing in…" : "Sign in to ArcGIS Online"}
+                {authBusy ? "Signing in…" : copy.signIn}
               </button>
             )}
           </div>
@@ -646,12 +730,12 @@ export default function App() {
               aria-expanded={filterOpen}
               aria-controls="valuation-filter"
             >
-              {filterOpen ? "Hide filters" : "Filter properties"}
+              {filterOpen ? copy.hideFilters : copy.filterProperties}
             </button>
             {filterOpen && (
               <div id="valuation-filter" className="filter-sidebar__content">
                 <div className="filter-sidebar__header">
-                  <h2>Filter valuation list</h2>
+                  <h2>{copy.filterList}</h2>
                   <button
                     type="button"
                     onClick={() => setFilterOpen(false)}
@@ -662,12 +746,12 @@ export default function App() {
                 </div>
                 <form onSubmit={applyFilter}>
               <label>
-                Local authority
+                {copy.localAuthority}
                 <select
                   value={localAuthorityFilter}
                   onChange={(event) => setLocalAuthorityFilter(event.target.value)}
                 >
-                  <option value="">All local authorities</option>
+                  <option value="">{copy.allAuthorities}</option>
                   {localAuthorities.map(([name, code]) => (
                     <option key={code} value={code}>
                       {name}
@@ -676,7 +760,7 @@ export default function App() {
                 </select>
               </label>
               <label>
-                Valuation category
+                {copy.category}
                 <select
                   value={categoryFilter}
                   onChange={(event) => {
@@ -684,7 +768,7 @@ export default function App() {
                     setSubcategoryFilter("");
                   }}
                 >
-                  <option value="">All categories</option>
+                  <option value="">{copy.allCategories}</option>
                   {valuationCategories.map(({ name }) => (
                     <option key={name} value={name}>
                       {name}
@@ -693,7 +777,7 @@ export default function App() {
                 </select>
               </label>
               <label>
-                Valuation subcategory
+                {copy.subcategory}
                 <select
                   value={subcategoryFilter}
                   onChange={(event) => setSubcategoryFilter(event.target.value)}
@@ -701,8 +785,8 @@ export default function App() {
                 >
                   <option value="">
                     {categoryFilter
-                      ? "All subcategories"
-                      : "Select a category first"}
+                      ? copy.allSubcategories
+                      : copy.selectCategory}
                   </option>
                   {valuationCategories
                     .find(({ name }) => name === categoryFilter)
@@ -714,13 +798,13 @@ export default function App() {
                 </select>
               </label>
               <div className="header-filter__actions">
-                <button type="submit">Apply filter</button>
+                <button type="submit">{copy.apply}</button>
                 <button type="button" onClick={clearFilter}>
-                  Clear
+                  {copy.clear}
                 </button>
               </div>
               <p className="header-filter__hint">
-                Choose names to filter the properties shown on the map.
+                {copy.filterHint}
               </p>
                 </form>
               </div>
@@ -737,16 +821,16 @@ export default function App() {
               aria-expanded={reportOpen}
               aria-controls="valuation-report"
             >
-              {reportOpen ? "Hide report" : "Show report"}
+              {reportOpen ? copy.hideReport : copy.showReport}
             </button>
             {reportOpen && (
               <div id="valuation-report" className="report-sidebar__content">
                 <div className="report-sidebar__header">
-                  <h2>Valuation report</h2>
+                  <h2>{copy.report}</h2>
                   <button
                     type="button"
                     onClick={() => setReportOpen(false)}
-                    aria-label="Close valuation report"
+                    aria-label={copy.closeReport}
                   >
                     ×
                   </button>
@@ -754,7 +838,7 @@ export default function App() {
                 {reportLoading && <p>Loading valuation report…</p>}
                 {reportError && <p className="auth-card__error">{reportError}</p>}
                 {!reportLoading && !reportError && !reportProperty && (
-                  <p>Select a property first.</p>
+                  <p>{copy.selectProperty}</p>
                 )}
                 {reportProperty && (
                   <>
@@ -806,7 +890,7 @@ export default function App() {
           </aside>
           {mapError && <p className="map-error">{mapError}</p>}
           {!mapReady && !mapError && (
-            <p className="map-loading">Loading map…</p>
+            <p className="map-loading">{copy.loadingMap}</p>
           )}
       </section>
       <footer className="app__footer">
