@@ -50,6 +50,51 @@ const categoryColors = [
   ["108", "#666666"],
 ] as const;
 
+const localAuthorities = [
+  ["Carlow County Council", "CAR"],
+  ["Cavan County Council", "CAV"],
+  ["Clare County Council", "CLA"],
+  ["Cork City Council", "CC"],
+  ["Cork County Council", "CO"],
+  ["Donegal County Council", "DON"],
+  ["Dublin City Council", "DCC"],
+  ["Dún Laoghaire-Rathdown County Council", "DLR"],
+  ["Fingal County Council", "FNG"],
+  ["Galway City Council", "GCC"],
+  ["Galway County Council", "GAL"],
+  ["Kerry County Council", "KER"],
+  ["Kildare County Council", "KIL"],
+  ["Kilkenny County Council", "KK"],
+  ["Laois County Council", "LAO"],
+  ["Leitrim County Council", "LEI"],
+  ["Limerick City and County Council", "LIM"],
+  ["Longford County Council", "LON"],
+  ["Louth County Council", "LOU"],
+  ["Mayo County Council", "MAY"],
+  ["Meath County Council", "MEA"],
+  ["Monaghan County Council", "MON"],
+  ["Offaly County Council", "OFF"],
+  ["Roscommon County Council", "ROS"],
+  ["Sligo County Council", "SLI"],
+  ["South Dublin County Council", "SDC"],
+  ["Tipperary County Council", "TIP"],
+  ["Waterford City and County Council", "WAT"],
+  ["Westmeath County Council", "WES"],
+  ["Wexford County Council", "WEX"],
+  ["Wicklow County Council", "WIC"],
+] as const;
+
+const valuationCategories = [
+  ["Office", "105"],
+  ["Retail", "374"],
+  ["Industrial", "183"],
+  ["Hotel and guest accommodation", "395"],
+  ["Residential", "231"],
+  ["Agricultural", "751"],
+  ["Health and community", "111"],
+  ["Other property use", "108"],
+] as const;
+
 type ValuationReportProperty = {
   Area: number;
   Nav: number;
@@ -447,20 +492,32 @@ export default function App() {
             >
               <h2>Filter valuation list</h2>
               <label>
-                Local authority code
-                <input
+                Local authority
+                <select
                   value={localAuthorityFilter}
                   onChange={(event) => setLocalAuthorityFilter(event.target.value)}
-                  placeholder="e.g. DCC"
-                />
+                >
+                  <option value="">All local authorities</option>
+                  {localAuthorities.map(([name, code]) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
               </label>
               <label>
-                Valuation category code
-                <input
+                Valuation category / subcategory
+                <select
                   value={categoryFilter}
                   onChange={(event) => setCategoryFilter(event.target.value)}
-                  placeholder="e.g. 105"
-                />
+                >
+                  <option value="">All categories</option>
+                  {valuationCategories.map(([name, code]) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
               </label>
               <div className="header-filter__actions">
                 <button type="submit">Apply filter</button>
@@ -469,7 +526,7 @@ export default function App() {
                 </button>
               </div>
               <p className="header-filter__hint">
-                Filters use the codes provided by the parcel vector tiles.
+                Choose names to filter the properties shown on the map.
               </p>
             </form>
           )}

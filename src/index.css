@@ -132,7 +132,8 @@ body,
   font-weight: 600;
 }
 
-.header-filter__panel input {
+.header-filter__panel input,
+.header-filter__panel select {
   width: 100%;
   padding: 0.55rem;
   border: 1px solid #b7c3c2;
