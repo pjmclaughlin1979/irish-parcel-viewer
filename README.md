@@ -1,8 +1,9 @@
-# Irish Parcel Viewer
+# Irish Valuation List
 
-This website is an **independent proof of concept** demonstrating how a Mapbox
-Vector Tile endpoint can be incorporated into an application built with the
-ArcGIS Maps SDK for JavaScript.
+This website is an **independent proof of concept** demonstrating how a
+Mapbox Vector Tile endpoint can be incorporated into an application built with
+the ArcGIS Maps SDK for JavaScript to present a map-based valuation list of
+properties.
 
 It is intended for technical exploration and evaluation of:
 

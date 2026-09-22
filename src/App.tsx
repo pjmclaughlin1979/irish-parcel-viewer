@@ -386,7 +386,7 @@ export default function App() {
         </nav>
         <div className="app__title">
           <p className="app__eyebrow">Valuation services</p>
-          <h1>Irish parcel viewer</h1>
+          <h1>Irish valuation list</h1>
         </div>
       </header>
       <section className="app__map-shell" aria-label="Irish parcel map">
