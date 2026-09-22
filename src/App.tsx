@@ -506,23 +506,33 @@ export default function App() {
           <p className="app__eyebrow">Valuation services</p>
           <h1>Irish valuation list</h1>
         </div>
-        <div className="header-filter">
-          <button
-            className="header-filter__toggle"
-            type="button"
-            onClick={() => setFilterOpen((open) => !open)}
-            aria-expanded={filterOpen}
-            aria-controls="valuation-filter"
-          >
-            Filter properties
-          </button>
-          {filterOpen && (
-            <form
-              id="valuation-filter"
-              className="header-filter__panel"
-              onSubmit={applyFilter}
+
+      </header>
+      <section className="app__map-shell" aria-label="Irish valuation list map">
+          <div ref={mapElement} className="app__map" />
+          <aside className={`filter-sidebar${filterOpen ? " filter-sidebar--open" : ""}`}>
+            <button
+              className="filter-sidebar__toggle"
+              type="button"
+              onClick={() => setFilterOpen((open) => !open)}
+              aria-expanded={filterOpen}
+              aria-controls="valuation-filter"
             >
-              <h2>Filter valuation list</h2>
+              {filterOpen ? "Hide filters" : "Filter properties"}
+            </button>
+            {filterOpen && (
+              <div id="valuation-filter" className="filter-sidebar__content">
+                <div className="filter-sidebar__header">
+                  <h2>Filter valuation list</h2>
+                  <button
+                    type="button"
+                    onClick={() => setFilterOpen(false)}
+                    aria-label="Close property filters"
+                  >
+                    ×
+                  </button>
+                </div>
+                <form onSubmit={applyFilter}>
               <label>
                 Local authority
                 <select
@@ -584,12 +594,10 @@ export default function App() {
               <p className="header-filter__hint">
                 Choose names to filter the properties shown on the map.
               </p>
-            </form>
-          )}
-        </div>
-      </header>
-      <section className="app__map-shell" aria-label="Irish parcel map">
-          <div ref={mapElement} className="app__map" />
+                </form>
+              </div>
+            )}
+          </aside>
           <div className="map-attribution">
             Parcel tiles: Tailte Éireann · Basemap: Esri Topographic
           </div>
