@@ -90,7 +90,7 @@ const authorityMapViews: Record<
   { center: [number, number]; zoom: number }
 > = {
   "0602": { center: [-6.27, 53.35], zoom: 12 },
-  "0603": { center: [-6.4, 53.5], zoom: 11 },
+  "0628": { center: [-6.4, 53.5], zoom: 11 },
   "0604": { center: [-6.4, 53.29], zoom: 11 },
   "0605": { center: [-6.17, 53.27], zoom: 11 },
 };
