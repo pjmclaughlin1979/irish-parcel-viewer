@@ -375,7 +375,6 @@ export default function App() {
   const [authChecking, setAuthChecking] = useState(true);
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
   const [filterOpen, setFilterOpen] = useState(false);
   const [localAuthorityFilter, setLocalAuthorityFilter] = useState("");
@@ -665,6 +664,28 @@ export default function App() {
 
   return (
     <main className="app">
+      <div className="account-bar">
+        {authChecking ? (
+          <span>{copy.checkingSignIn}</span>
+        ) : arcgisUser ? (
+          <span>
+            {copy.signedInAs} <strong>{arcgisUser.fullName}</strong>
+            <span className="account-bar__username"> ({arcgisUser.username})</span>
+          </span>
+        ) : (
+          <span>{copy.signInToView}</span>
+        )}
+        {!authChecking && arcgisUser && (
+          <button type="button" onClick={handleSignOut}>
+            {copy.signOut}
+          </button>
+        )}
+        {!authChecking && !arcgisUser && (
+          <button type="button" onClick={handleSignIn} disabled={authBusy}>
+            {authBusy ? "Signing in…" : copy.signIn}
+          </button>
+        )}
+      </div>
       <header className="app__header">
         <a className="app__logo" href="https://tailte.ie" title="Tailte Éireann">
           <img
@@ -682,16 +703,6 @@ export default function App() {
           <p className="app__eyebrow">{copy.valuationServices}</p>
           <h1>{copy.title}</h1>
         </div>
-        <div className="app__auth">
-          <button
-            type="button"
-            onClick={() => setAuthDialogOpen((open) => !open)}
-            aria-expanded={authDialogOpen}
-            aria-controls="account-dialog"
-          >
-            {copy.account}
-          </button>
-        </div>
         <button
           className="language-toggle"
           type="button"
@@ -701,39 +712,6 @@ export default function App() {
           {copy.language}
         </button>
       </header>
-      {authDialogOpen && (
-        <section id="account-dialog" className="account-dialog" aria-label={copy.accountStatus}>
-          <div className="account-dialog__card">
-            <div className="account-dialog__header">
-              <h2>{copy.accountStatus}</h2>
-              <button
-                type="button"
-                onClick={() => setAuthDialogOpen(false)}
-                aria-label={copy.closeReport}
-              >
-                ×
-              </button>
-            </div>
-            {authError && <p className="app__auth-error">{authError}</p>}
-            {authChecking ? (
-              <p>{copy.checkingSignIn}</p>
-            ) : arcgisUser ? (
-              <>
-                <p title={arcgisUser.username}>
-                  {copy.signedInAs} {arcgisUser.fullName}
-                </p>
-                <button type="button" onClick={handleSignOut}>
-                  {copy.signOut}
-                </button>
-              </>
-            ) : (
-              <button type="button" onClick={handleSignIn} disabled={authBusy}>
-                {authBusy ? "Signing in…" : copy.signIn}
-              </button>
-            )}
-          </div>
-        </section>
-      )}
       {authChecking || !arcgisUser ? (
         <section className="app__auth-gate" aria-live="polite">
           <div className="auth-card">
