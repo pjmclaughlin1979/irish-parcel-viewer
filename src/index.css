@@ -141,6 +141,12 @@ body,
   font: inherit;
 }
 
+.header-filter__panel select:disabled {
+  background: #f3f1ed;
+  color: #69716b;
+  cursor: not-allowed;
+}
+
 .header-filter__actions {
   display: flex;
   gap: 0.6rem;

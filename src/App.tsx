@@ -85,14 +85,24 @@ const localAuthorities = [
 ] as const;
 
 const valuationCategories = [
-  ["Office", "105"],
-  ["Retail", "374"],
-  ["Industrial", "183"],
-  ["Hotel and guest accommodation", "395"],
-  ["Residential", "231"],
-  ["Agricultural", "751"],
-  ["Health and community", "111"],
-  ["Other property use", "108"],
+  {
+    name: "Commercial",
+    subcategories: [
+      ["Office", "105"],
+      ["Retail", "374"],
+      ["Industrial", "183"],
+      ["Hotel and guest accommodation", "395"],
+    ],
+  },
+  {
+    name: "Other property",
+    subcategories: [
+      ["Residential", "231"],
+      ["Agricultural", "751"],
+      ["Health and community", "111"],
+      ["Other property use", "108"],
+    ],
+  },
 ] as const;
 
 type ValuationReportProperty = {
@@ -121,7 +131,8 @@ type TailteProperty = {
 
 function createParcelStyle(filter: {
   localAuthority: string;
-  category: string;
+  categoryCodes: string[];
+  subcategory: string;
 }) {
   const layer = {
     id: "parcel-points",
@@ -140,15 +151,18 @@ function createParcelStyle(filter: {
       "circle-stroke-color": "#7f4817",
       "circle-stroke-width": 1,
     },
-    ...(filter.localAuthority || filter.category
+    ...(filter.localAuthority || filter.categoryCodes.length || filter.subcategory
       ? {
           filter: [
             "all",
             ...(filter.localAuthority
               ? [["==", ["get", "retLoc"], filter.localAuthority]]
               : []),
-            ...(filter.category
-              ? [["==", ["get", "catUseCode"], filter.category]]
+            ...(filter.categoryCodes.length
+              ? [["in", ["get", "catUseCode"], ["literal", filter.categoryCodes]]]
+              : []),
+            ...(filter.subcategory
+              ? [["==", ["get", "catUseCode"], filter.subcategory]]
               : []),
           ],
         }
@@ -221,9 +235,11 @@ export default function App() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [localAuthorityFilter, setLocalAuthorityFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [subcategoryFilter, setSubcategoryFilter] = useState("");
   const [appliedFilter, setAppliedFilter] = useState({
     localAuthority: "",
-    category: "",
+    categoryCodes: [] as string[],
+    subcategory: "",
   });
   const parcelLayer = useRef<VectorTileLayer | null>(null);
   useEffect(() => {
@@ -445,14 +461,23 @@ export default function App() {
     event.preventDefault();
     setAppliedFilter({
       localAuthority: localAuthorityFilter.trim(),
-      category: categoryFilter.trim(),
+      categoryCodes:
+        valuationCategories.find(({ name }) => name === categoryFilter)?.subcategories.map(
+          ([, code]) => code,
+        ) ?? [],
+      subcategory: subcategoryFilter,
     });
   };
 
   const clearFilter = () => {
     setLocalAuthorityFilter("");
     setCategoryFilter("");
-    setAppliedFilter({ localAuthority: "", category: "" });
+    setSubcategoryFilter("");
+    setAppliedFilter({
+      localAuthority: "",
+      categoryCodes: [],
+      subcategory: "",
+    });
   };
 
   return (
@@ -506,17 +531,41 @@ export default function App() {
                 </select>
               </label>
               <label>
-                Valuation category / subcategory
+                Valuation category
                 <select
                   value={categoryFilter}
-                  onChange={(event) => setCategoryFilter(event.target.value)}
+                  onChange={(event) => {
+                    setCategoryFilter(event.target.value);
+                    setSubcategoryFilter("");
+                  }}
                 >
                   <option value="">All categories</option>
-                  {valuationCategories.map(([name, code]) => (
-                    <option key={code} value={code}>
+                  {valuationCategories.map(({ name }) => (
+                    <option key={name} value={name}>
                       {name}
                     </option>
                   ))}
+                </select>
+              </label>
+              <label>
+                Valuation subcategory
+                <select
+                  value={subcategoryFilter}
+                  onChange={(event) => setSubcategoryFilter(event.target.value)}
+                  disabled={!categoryFilter}
+                >
+                  <option value="">
+                    {categoryFilter
+                      ? "All subcategories"
+                      : "Select a category first"}
+                  </option>
+                  {valuationCategories
+                    .find(({ name }) => name === categoryFilter)
+                    ?.subcategories.map(([name, code]) => (
+                      <option key={code} value={code}>
+                        {name}
+                      </option>
+                    ))}
                 </select>
               </label>
               <div className="header-filter__actions">
