@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import Map from "@arcgis/core/Map.js";
 import Basemap from "@arcgis/core/Basemap.js";
 import MapView from "@arcgis/core/views/MapView.js";
@@ -73,7 +74,10 @@ type TailteProperty = {
   ValuationReport: ValuationReportProperty[];
 };
 
-function createParcelStyle() {
+function createParcelStyle(filter: {
+  localAuthority: string;
+  category: string;
+}) {
   const layer = {
     id: "parcel-points",
     type: "circle",
@@ -91,6 +95,19 @@ function createParcelStyle() {
       "circle-stroke-color": "#7f4817",
       "circle-stroke-width": 1,
     },
+    ...(filter.localAuthority || filter.category
+      ? {
+          filter: [
+            "all",
+            ...(filter.localAuthority
+              ? [["==", ["get", "retLoc"], filter.localAuthority]]
+              : []),
+            ...(filter.category
+              ? [["==", ["get", "catUseCode"], filter.category]]
+              : []),
+          ],
+        }
+      : {}),
   };
 
   return {
@@ -156,6 +173,14 @@ export default function App() {
   const [reportProperty, setReportProperty] = useState<TailteProperty | null>(
     null,
   );
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [localAuthorityFilter, setLocalAuthorityFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [appliedFilter, setAppliedFilter] = useState({
+    localAuthority: "",
+    category: "",
+  });
+  const parcelLayer = useRef<VectorTileLayer | null>(null);
   useEffect(() => {
     const showReport = (event: Event) => {
       const detail = (event as CustomEvent<{
@@ -208,9 +233,10 @@ export default function App() {
     const layer = new VectorTileLayer({
       id: "parcels",
       title: "Tailte Éireann parcels",
-      style: createParcelStyle(),
+      style: createParcelStyle(appliedFilter),
       visible: true,
     });
+    parcelLayer.current = layer;
     const parcelPopup = new PopupTemplate({
       title: "Parcel details",
       content: [
@@ -366,8 +392,23 @@ export default function App() {
       legend.destroy();
       search.destroy();
       clickHandle.remove();
+      parcelLayer.current = null;
     };
-  }, []);
+  }, [appliedFilter]);
+
+  const applyFilter = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setAppliedFilter({
+      localAuthority: localAuthorityFilter.trim(),
+      category: categoryFilter.trim(),
+    });
+  };
+
+  const clearFilter = () => {
+    setLocalAuthorityFilter("");
+    setCategoryFilter("");
+    setAppliedFilter({ localAuthority: "", category: "" });
+  };
 
   return (
     <main className="app">
@@ -387,6 +428,51 @@ export default function App() {
         <div className="app__title">
           <p className="app__eyebrow">Valuation services</p>
           <h1>Irish valuation list</h1>
+        </div>
+        <div className="header-filter">
+          <button
+            className="header-filter__toggle"
+            type="button"
+            onClick={() => setFilterOpen((open) => !open)}
+            aria-expanded={filterOpen}
+            aria-controls="valuation-filter"
+          >
+            Filter properties
+          </button>
+          {filterOpen && (
+            <form
+              id="valuation-filter"
+              className="header-filter__panel"
+              onSubmit={applyFilter}
+            >
+              <h2>Filter valuation list</h2>
+              <label>
+                Local authority code
+                <input
+                  value={localAuthorityFilter}
+                  onChange={(event) => setLocalAuthorityFilter(event.target.value)}
+                  placeholder="e.g. DCC"
+                />
+              </label>
+              <label>
+                Valuation category code
+                <input
+                  value={categoryFilter}
+                  onChange={(event) => setCategoryFilter(event.target.value)}
+                  placeholder="e.g. 105"
+                />
+              </label>
+              <div className="header-filter__actions">
+                <button type="submit">Apply filter</button>
+                <button type="button" onClick={clearFilter}>
+                  Clear
+                </button>
+              </div>
+              <p className="header-filter__hint">
+                Filters use the codes provided by the parcel vector tiles.
+              </p>
+            </form>
+          )}
         </div>
       </header>
       <section className="app__map-shell" aria-label="Irish parcel map">
