@@ -564,11 +564,17 @@ body,
 
 @media (max-width: 560px) {
   .app__header {
+    min-height: 3.75rem;
     padding-inline: 1rem;
+    padding-block: 0.5rem;
   }
 
   .app__logo img {
-    width: 8rem;
+    width: 7rem;
+  }
+
+  .app__nav {
+    display: none;
   }
 
   .app__title {
@@ -579,9 +585,29 @@ body,
     font-size: 0.85rem;
   }
 
+  .app__map-shell {
+    min-height: 70svh;
+  }
+
+  .app__footer {
+    padding-block: 0.75rem;
+  }
+
   .app__footer-main {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .app__footer-main p {
+    display: none;
+  }
+
+  .app__footer-main nav {
+    font-size: 0.75rem;
+  }
+
+  .app__footer-terms {
+    font-size: 0.65rem;
   }
 
   .app__footer-terms span {
