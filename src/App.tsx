@@ -339,6 +339,7 @@ export default function App() {
 
   useEffect(() => {
     if (!mapElement.current) return;
+    if (!arcgisUser) return;
 
     const topoLayer = new TileLayer({
       id: "esri-topographic",
@@ -517,7 +518,7 @@ export default function App() {
       clickHandle.remove();
       parcelLayer.current = null;
     };
-  }, [appliedFilter]);
+  }, [appliedFilter, arcgisUser]);
 
   const applyFilter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -608,8 +609,33 @@ export default function App() {
             </button>
           )}
         </div>
-
       </header>
+      {authChecking || !arcgisUser ? (
+        <section className="app__auth-gate" aria-live="polite">
+          <div className="auth-card">
+            <p className="app__eyebrow">ArcGIS Online access</p>
+            <h2>Sign in to view the valuation list</h2>
+            <p>
+              Authenticate with ArcGIS Online to access the interactive
+              valuation map and property information.
+            </p>
+            {authError && <p className="auth-card__error">{authError}</p>}
+            {authChecking ? (
+              <p>Checking your ArcGIS Online session…</p>
+            ) : (
+              <button
+                className="auth-card__sign-in"
+                type="button"
+                onClick={handleSignIn}
+                disabled={authBusy}
+              >
+                {authBusy ? "Signing in…" : "Sign in to ArcGIS Online"}
+              </button>
+            )}
+          </div>
+        </section>
+      ) : (
+        <>
       <section className="app__map-shell" aria-label="Irish valuation list map">
           <div ref={mapElement} className="app__map" />
           <aside className={`filter-sidebar${filterOpen ? " filter-sidebar--open" : ""}`}>
@@ -809,6 +835,8 @@ export default function App() {
           <span>© Tailte Éireann</span>
         </div>
       </footer>
+        </>
+      )}
     </main>
   );
 }

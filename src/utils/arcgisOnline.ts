@@ -3,7 +3,7 @@ import esriId from "@arcgis/core/identity/IdentityManager.js";
 import Portal from "@arcgis/core/portal/Portal.js";
 
 const PORTAL_URL = "https://www.arcgis.com";
-const OAUTH_APP_ID = "VqHCYXLpavLxvb59";
+const OAUTH_APP_ID = "K70NdJoiPdGb9DAj";
 
 let oauthInitialized = false;
 
