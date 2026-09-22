@@ -85,6 +85,16 @@ const localAuthorities = [
   ["Wicklow County Council", "WIC"],
 ] as const;
 
+const authorityMapViews: Record<
+  string,
+  { center: [number, number]; zoom: number }
+> = {
+  "0602": { center: [-6.27, 53.35], zoom: 12 },
+  "0603": { center: [-6.4, 53.5], zoom: 11 },
+  "0604": { center: [-6.4, 53.29], zoom: 11 },
+  "0605": { center: [-6.17, 53.27], zoom: 11 },
+};
+
 const valuationCategories = [
   {
     name: "Commercial",
@@ -424,7 +434,15 @@ export default function App() {
     });
 
     mapView.when(
-      () => setMapReady(true),
+      () => {
+        setMapReady(true);
+        const authorityView = authorityMapViews[appliedFilter.localAuthority];
+        if (authorityView) {
+          mapView.goTo(authorityView).catch((error: unknown) => {
+            console.error("Failed to zoom to filtered authority", error);
+          });
+        }
+      },
       (error: unknown) => {
         console.error("Failed to initialize the map view", error);
         setMapError("The map view could not be initialized.");
