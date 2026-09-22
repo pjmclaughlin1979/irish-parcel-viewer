@@ -208,7 +208,6 @@ const interfaceCopy = {
     address: <>Smithfield Hall, Smithfield,<br />Dublin 7, D07 AEF4</>,
     getDirections: "Get directions",
     backToTop: "Back to top",
-    websiteDesignedBy: "Website designed by",
     filterProperties: "Filter properties",
     hideFilters: "Hide filters",
     filterList: "Filter valuation list",
@@ -262,7 +261,6 @@ const interfaceCopy = {
     address: <>Smithfield Hall, Margadh na Feirme,<br />Baile Átha Cliath 7, D07 AEF4</>,
     getDirections: "Faigh Treoracha",
     backToTop: "Fill ar an mbarr",
-    websiteDesignedBy: "Dearadh an suíomh gréasáin ag",
     filterProperties: "Scag réadmhaoine",
     hideFilters: "Folaigh na scagairí",
     filterList: "Scag liosta na luachálacha",
@@ -1004,9 +1002,6 @@ export default function App() {
               <span aria-hidden="true">⌃</span>
               {copy.backToTop}
             </a>
-          </div>
-          <div className="app__footer-row app__footer-row--credit">
-            <p>{copy.websiteDesignedBy} <a href="https://www.ebowdigital.com" target="_blank" rel="noreferrer">Ebow</a></p>
           </div>
         </div>
       </footer>

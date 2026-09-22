@@ -15,7 +15,7 @@
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
   background: var(--app-paper);
@@ -26,7 +26,7 @@ body,
 .app {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh;
 }
 
 .app__header {
@@ -328,8 +328,8 @@ body,
 
 .app__map-shell {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 auto;
+  height: max(72vh, 42rem);
 }
 
 .map-loading {
@@ -510,8 +510,8 @@ body,
 .app__footer {
   flex: 0 0 auto;
   padding: 3rem clamp(1rem, 4vw, 4rem) 1rem;
-  background: #454745;
-  color: #fff;
+  background: #fff;
+  color: var(--app-ink);
 }
 
 .app__footer-container {
@@ -532,7 +532,7 @@ body,
 
 .app__footer-row--terms {
   padding: 1rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1px solid var(--app-border);
 }
 
 .app__footer-row--contact {
@@ -543,7 +543,7 @@ body,
 
 .app__footer-row--credit {
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1px solid var(--app-border);
   color: #d5ddd6;
   font-size: 0.75rem;
 }
@@ -572,7 +572,7 @@ body,
 
 .app__footer-terms {
   gap: 0.5rem 1.1rem;
-  color: #d5ddd6;
+  color: #5b765e;
   font-size: 0.75rem;
 }
 
@@ -603,7 +603,7 @@ body,
   align-items: center;
   justify-self: end;
   gap: 0.35rem;
-  color: #fff;
+  color: var(--app-ink);
   font-size: 0.75rem;
   text-align: center;
 }
@@ -692,7 +692,7 @@ body,
   }
 
   .app__map-shell {
-    min-height: 70svh;
+    height: max(72svh, 34rem);
   }
 
   .app__footer {
