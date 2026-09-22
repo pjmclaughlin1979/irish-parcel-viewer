@@ -57,9 +57,10 @@ const localAuthorities = [
   ["Cork City Council", "CC"],
   ["Cork County Council", "CO"],
   ["Donegal County Council", "DON"],
-  ["Dublin City Council", "DCC"],
-  ["Dún Laoghaire-Rathdown County Council", "DLR"],
-  ["Fingal County Council", "FNG"],
+  // The first four digits of the valuation roll number identify the authority.
+  ["Dublin City Council", "0602"],
+  ["Dún Laoghaire-Rathdown County Council", "0605"],
+  ["Fingal County Council", "0603"],
   ["Galway City Council", "GCC"],
   ["Galway County Council", "GAL"],
   ["Kerry County Council", "KER"],
@@ -76,7 +77,7 @@ const localAuthorities = [
   ["Offaly County Council", "OFF"],
   ["Roscommon County Council", "ROS"],
   ["Sligo County Council", "SLI"],
-  ["South Dublin County Council", "SDC"],
+  ["South Dublin County Council", "0604"],
   ["Tipperary County Council", "TIP"],
   ["Waterford City and County Council", "WAT"],
   ["Westmeath County Council", "WES"],
@@ -156,7 +157,13 @@ function createParcelStyle(filter: {
           filter: [
             "all",
             ...(filter.localAuthority
-              ? [["==", ["get", "retLoc"], filter.localAuthority]]
+              ? [
+                  [
+                    "==",
+                    ["slice", ["to-string", ["get", "rollNumber"]], 0, 4],
+                    filter.localAuthority,
+                  ],
+                ]
               : []),
             ...(filter.categoryCodes.length
               ? [["in", ["get", "catUseCode"], ["literal", filter.categoryCodes]]]
