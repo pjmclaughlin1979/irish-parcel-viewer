@@ -60,7 +60,7 @@ const localAuthorities = [
   // The first four digits of the valuation roll number identify the authority.
   ["Dublin City Council", "0602"],
   ["Dún Laoghaire-Rathdown County Council", "0605"],
-  ["Fingal County Council", "0603"],
+  ["Fingal County Council", "0628"],
   ["Galway City Council", "GCC"],
   ["Galway County Council", "GAL"],
   ["Kerry County Council", "KER"],
