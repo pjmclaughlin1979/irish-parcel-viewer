@@ -336,13 +336,16 @@ function formatCurrency(value: number | null | undefined) {
     : "—";
 }
 
-function createReportContent(event: PopupTemplateCreatorEvent): HTMLElement {
+function createReportContent(
+  event: PopupTemplateCreatorEvent,
+  reportLabel: string,
+): HTMLElement {
   const container = document.createElement("div");
   const propertyNumber = event.graphic.attributes?.propNumber;
   const button = document.createElement("button");
   button.className = "parcel-report-button";
   button.type = "button";
-  button.textContent = "View valuation report";
+  button.textContent = reportLabel;
   button.disabled = propertyNumber === null || propertyNumber === undefined;
   container.append(button);
 
@@ -445,19 +448,36 @@ export default function App() {
     });
     parcelLayer.current = layer;
     const parcelPopup = new PopupTemplate({
-      title: "Parcel details",
+      title: language === "ga" ? "Sonraí réadmhaoine" : "Property details",
       content: [
         {
           type: "fields",
           fieldInfos: [
-            { fieldName: "propNumber", label: "Property number" },
-            { fieldName: "tfa", label: "Total floor area", format: { places: 1 } },
-            { fieldName: "val", label: "Valuation", format: { places: 0, digitSeparator: true } },
+            {
+              fieldName: "propNumber",
+              label: language === "ga" ? "Uimhir réadmhaoine" : "Property number",
+            },
+            {
+              fieldName: "tfa",
+              label: language === "ga" ? "Achar urláir iomlán" : "Total floor area",
+              format: { places: 1 },
+            },
+            {
+              fieldName: "val",
+              label: language === "ga" ? "Luacháil" : "Valuation",
+              format: { places: 0, digitSeparator: true },
+            },
           ],
         },
         {
           type: "custom",
-          creator: createReportContent,
+          creator: (event: PopupTemplateCreatorEvent) =>
+            createReportContent(
+              event,
+              language === "ga"
+                ? "Féach ar an tuairisc luachála"
+                : "View valuation report",
+            ),
         },
       ],
     });
@@ -609,7 +629,7 @@ export default function App() {
       clickHandle.remove();
       parcelLayer.current = null;
     };
-  }, [appliedFilter, arcgisUser]);
+  }, [appliedFilter, arcgisUser, language]);
 
   const applyFilter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
