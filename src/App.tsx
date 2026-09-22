@@ -191,6 +191,12 @@ const interfaceCopy = {
     signInToView: "Sign in to view the valuation list",
     authenticate: "Authenticate with ArcGIS Online to access the interactive valuation map and property information.",
     checkingSession: "Checking your ArcGIS Online session…",
+    account: "Account",
+    accountStatus: "ArcGIS Online account",
+    footerDescription: "We provide a property registration system, property valuation service, and national mapping and surveying infrastructure for the State.",
+    dataSharing: "Data sharing",
+    privacy: "Privacy notice",
+    accessibility: "Accessibility",
     filterProperties: "Filter properties",
     hideFilters: "Hide filters",
     filterList: "Filter valuation list",
@@ -227,6 +233,12 @@ const interfaceCopy = {
     signInToView: "Sínigh isteach chun an liosta luachála a fheiceáil",
     authenticate: "Fíordheimhnigh le ArcGIS Online chun rochtain a fháil ar an léarscáil idirghníomhach agus ar fhaisnéis réadmhaoine.",
     checkingSession: "Seisiún ArcGIS Online á sheiceáil…",
+    account: "Cuntas",
+    accountStatus: "Cuntas ArcGIS Online",
+    footerDescription: "Soláthraímid córas cláraithe réadmhaoine, seirbhís luachála réadmhaoine, agus bonneagar náisiúnta mapála agus suirbhéireachta don Stát.",
+    dataSharing: "Comhroinnt sonraí",
+    privacy: "Fógra príobháideachais",
+    accessibility: "Inrochtaineacht",
     filterProperties: "Scag réadmhaoine",
     hideFilters: "Folaigh na scagairí",
     filterList: "Scag liosta na luachálacha",
@@ -363,6 +375,7 @@ export default function App() {
   const [authChecking, setAuthChecking] = useState(true);
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
   const [filterOpen, setFilterOpen] = useState(false);
   const [localAuthorityFilter, setLocalAuthorityFilter] = useState("");
@@ -670,23 +683,14 @@ export default function App() {
           <h1>{copy.title}</h1>
         </div>
         <div className="app__auth">
-          {authError && <span className="app__auth-error">{authError}</span>}
-          {authChecking ? (
-            <span>{copy.checkingSignIn}</span>
-          ) : arcgisUser ? (
-            <>
-              <span title={arcgisUser.username}>
-                {copy.signedInAs} {arcgisUser.fullName}
-              </span>
-              <button type="button" onClick={handleSignOut}>
-                {copy.signOut}
-              </button>
-            </>
-          ) : (
-            <button type="button" onClick={handleSignIn} disabled={authBusy}>
-              {authBusy ? "Signing in…" : copy.signIn}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setAuthDialogOpen((open) => !open)}
+            aria-expanded={authDialogOpen}
+            aria-controls="account-dialog"
+          >
+            {copy.account}
+          </button>
         </div>
         <button
           className="language-toggle"
@@ -697,6 +701,39 @@ export default function App() {
           {copy.language}
         </button>
       </header>
+      {authDialogOpen && (
+        <section id="account-dialog" className="account-dialog" aria-label={copy.accountStatus}>
+          <div className="account-dialog__card">
+            <div className="account-dialog__header">
+              <h2>{copy.accountStatus}</h2>
+              <button
+                type="button"
+                onClick={() => setAuthDialogOpen(false)}
+                aria-label={copy.closeReport}
+              >
+                ×
+              </button>
+            </div>
+            {authError && <p className="app__auth-error">{authError}</p>}
+            {authChecking ? (
+              <p>{copy.checkingSignIn}</p>
+            ) : arcgisUser ? (
+              <>
+                <p title={arcgisUser.username}>
+                  {copy.signedInAs} {arcgisUser.fullName}
+                </p>
+                <button type="button" onClick={handleSignOut}>
+                  {copy.signOut}
+                </button>
+              </>
+            ) : (
+              <button type="button" onClick={handleSignIn} disabled={authBusy}>
+                {authBusy ? "Signing in…" : copy.signIn}
+              </button>
+            )}
+          </div>
+        </section>
+      )}
       {authChecking || !arcgisUser ? (
         <section className="app__auth-gate" aria-live="polite">
           <div className="auth-card">
@@ -900,22 +937,21 @@ export default function App() {
             alt="Tailte Éireann"
           />
           <nav aria-label="Footer navigation">
-            <a href="https://tailte.ie/services/">Services</a>
-            <a href="https://tailte.ie/resources/">Resources</a>
-            <a href="https://tailte.ie/map-shop/">Map shop</a>
-            <a href="https://tailte.ie/our-archives/">Our archives</a>
-            <a href="https://tailte.ie/careers/">Careers</a>
-            <a href="https://tailte.ie/contact-us/">Contact us</a>
+            <a href="https://tailte.ie/services/">{copy.services}</a>
+            <a href="https://tailte.ie/resources/">{copy.resources}</a>
+            <a href="https://tailte.ie/map-shop/">{language === "ga" ? "Siopa léarscáileanna" : "Map shop"}</a>
+            <a href="https://tailte.ie/our-archives/">{language === "ga" ? "Ár gcartlanna" : "Our archives"}</a>
+            <a href="https://tailte.ie/careers/">{language === "ga" ? "Gairmeacha" : "Careers"}</a>
+            <a href="https://tailte.ie/contact-us/">{copy.contact}</a>
           </nav>
           <p>
-            We provide a property registration system, property valuation service,
-            and national mapping and surveying infrastructure for the State.
+            {copy.footerDescription}
           </p>
         </div>
         <div className="app__footer-terms">
-          <a href="https://tailte.ie/data-sharing/">Data sharing</a>
-          <a href="https://tailte.ie/privacy-notice/">Privacy notice</a>
-          <a href="https://tailte.ie/accessibility-statement/">Accessibility</a>
+          <a href="https://tailte.ie/data-sharing/">{copy.dataSharing}</a>
+          <a href="https://tailte.ie/privacy-notice/">{copy.privacy}</a>
+          <a href="https://tailte.ie/accessibility-statement/">{copy.accessibility}</a>
           <span>© Tailte Éireann</span>
         </div>
       </footer>

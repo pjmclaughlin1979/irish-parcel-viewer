@@ -253,6 +253,53 @@ body,
   font-size: 0.72rem;
 }
 
+.account-dialog {
+  position: absolute;
+  top: calc(var(--app-header-height) + 0.5rem);
+  right: clamp(1rem, 4vw, 4rem);
+  z-index: 10;
+}
+
+.account-dialog__card {
+  width: min(22rem, calc(100vw - 2rem));
+  padding: 1rem;
+  border: 1px solid var(--app-border);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(3, 10, 0, 0.16);
+}
+
+.account-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.account-dialog__header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.account-dialog__header button {
+  border: 0;
+  background: transparent;
+  color: var(--app-ink);
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+.account-dialog__card > button {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--app-green);
+  border-radius: 4px;
+  background: var(--app-green);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
 .language-toggle {
   padding: 0.5rem 0.7rem;
   border: 1px solid #b7c3c2;
