@@ -220,20 +220,14 @@ body,
   text-underline-offset: 0.2rem;
 }
 
-.app__user {
+.app__auth {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   font-size: 0.85rem;
 }
 
-.app__auth-control {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.app__auth-control button {
+.app__auth button {
   padding: 0.55rem 0.8rem;
   border: 1px solid #b7c3c2;
   border-radius: 4px;
@@ -244,11 +238,11 @@ body,
   font-size: 0.8rem;
 }
 
-.app__auth-control button:hover {
+.app__auth button:hover {
   border-color: var(--app-green);
 }
 
-.app__auth-control button:disabled {
+.app__auth button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -257,41 +251,6 @@ body,
   max-width: 16rem;
   color: #a32920;
   font-size: 0.72rem;
-}
-
-.app__auth-error code {
-  font-size: 0.7rem;
-}
-
-.app__user button,
-.auth-card__sign-in {
-  padding: 0.55rem 0.8rem;
-  border: 1px solid #b7c3c2;
-  border-radius: 4px;
-  background: #fff;
-  color: var(--app-ink);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.8rem;
-}
-
-.app__user button:hover,
-.auth-card__sign-in:hover {
-  border-color: var(--app-green);
-}
-
-.auth-card__sign-in:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
-.app__auth {
-  flex: 1 1 auto;
-  display: grid;
-  place-items: center;
-  padding: 2rem;
-  background: var(--app-paper);
-  color: var(--app-ink);
 }
 
 .auth-card {

@@ -13,6 +13,12 @@ import BasemapGallery from "@arcgis/core/widgets/BasemapGallery.js";
 import Search from "@arcgis/core/widgets/Search.js";
 import type { PopupTemplateCreatorEvent } from "@arcgis/core/popup/types.js";
 import type { GraphicHit } from "@arcgis/core/views/types.js";
+import {
+  checkArcgisSignIn,
+  signInToArcgis,
+  signOutOfArcgis,
+  type ArcgisUser,
+} from "./utils/arcgisOnline.js";
 
 const PARCEL_TILE_URL =
   "https://opendata.tailte.ie/api/layers/parcels/{x}/{y}/{z}";
@@ -276,6 +282,10 @@ export default function App() {
   const [reportProperty, setReportProperty] = useState<TailteProperty | null>(
     null,
   );
+  const [arcgisUser, setArcgisUser] = useState<ArcgisUser | null>(null);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [authBusy, setAuthBusy] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [localAuthorityFilter, setLocalAuthorityFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -532,6 +542,34 @@ export default function App() {
     });
   };
 
+  useEffect(() => {
+    checkArcgisSignIn()
+      .then(setArcgisUser)
+      .catch((error: unknown) => {
+        console.error("Failed to check ArcGIS Online sign-in status", error);
+        setAuthError("ArcGIS Online sign-in status could not be checked.");
+      })
+      .finally(() => setAuthChecking(false));
+  }, []);
+
+  const handleSignIn = async () => {
+    setAuthBusy(true);
+    setAuthError(null);
+    try {
+      setArcgisUser(await signInToArcgis());
+    } catch (error) {
+      console.error("ArcGIS Online sign-in failed", error);
+      setAuthError("ArcGIS Online sign-in failed. Please try again.");
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
+  const handleSignOut = () => {
+    signOutOfArcgis();
+    setArcgisUser(null);
+  };
+
   return (
     <main className="app">
       <header className="app__header">
@@ -550,6 +588,25 @@ export default function App() {
         <div className="app__title">
           <p className="app__eyebrow">Valuation services</p>
           <h1>Irish valuation list</h1>
+        </div>
+        <div className="app__auth">
+          {authError && <span className="app__auth-error">{authError}</span>}
+          {authChecking ? (
+            <span>Checking sign-in…</span>
+          ) : arcgisUser ? (
+            <>
+              <span title={arcgisUser.username}>
+                Signed in as {arcgisUser.fullName}
+              </span>
+              <button type="button" onClick={handleSignOut}>
+                Sign out
+              </button>
+            </>
+          ) : (
+            <button type="button" onClick={handleSignIn} disabled={authBusy}>
+              {authBusy ? "Signing in…" : "Sign in to ArcGIS Online"}
+            </button>
+          )}
         </div>
 
       </header>
